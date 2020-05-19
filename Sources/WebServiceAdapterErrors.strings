@@ -1,0 +1,12 @@
+/* 
+  WebServiceAdapterErrors.strings
+  Apotheken
+
+  Created by Joachim Deelen on 01.04.20.
+  Copyright © 2020 DAN Netzwerk Deutscher Apotheker GmbH. All rights reserved.
+*/
+
+"WebServiceAdapterError.invalidData" = "Ungültige Daten";
+"WebServiceAdapterError.invalidData.failure.Data received but validator refused to validate it!" = "Daten wurden empfangen konnten aber nicht validiert werden.";
+
+"WebServiceAdapterError.sendingRequest" = "Request gesendet";
