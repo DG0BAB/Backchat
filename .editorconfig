@@ -1,0 +1,13 @@
+root = true
+
+[*.swift]
+indent_style = tab
+indent_size = 4
+
+[*.h]
+ident_style = tab
+ident_size = 4
+
+[*.m]
+ident_style = tab
+ident_size = 4
