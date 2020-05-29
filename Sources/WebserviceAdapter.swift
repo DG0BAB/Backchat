@@ -1,4 +1,6 @@
 import Foundation
+import Clause
+import Fehlerteufel
 import PromiseKit
 
 /// A closure that checks if the given `Data` is valid data
@@ -103,7 +105,7 @@ struct WebServiceDefaultAdapter: WebServiceAdapter {
 Your own, specialized `WebServiceAdapter`s, can easily extend this and
 add specific errors.
 */
-struct WebServiceAdapterError: LocalizedError {
+struct WebServiceAdapterError: Fehlerteufel.LocalizedError {
 	static var tableName: String { return "WebServiceAdapterErrors" }
 	let specifics: ErrorSpecifics
 	init(_ specifics: ErrorSpecifics) { self.specifics = specifics }

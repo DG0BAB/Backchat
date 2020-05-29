@@ -6,11 +6,13 @@
 //
 
 import Foundation
+import Clause
+import Fehlerteufel
 import PromiseKit
 
 class HTTPNetworkService: NetworkService {
 
-	struct NetworkServiceError: LocalizedError {
+	struct NetworkServiceError: Fehlerteufel.LocalizedError {
 		static var tableName: String { return "NetworkServiceErrors" }
 
 		let specifics: ErrorSpecifics
@@ -106,7 +108,7 @@ class HTTPNetworkService: NetworkService {
 				}
 				// Reject if no data was received
 				guard let data = data,
-					data.isNotEmpty else {
+					!data.isEmpty else {
 					seal.reject(NetworkServiceError.response { "No data received." })
 					return
 				}

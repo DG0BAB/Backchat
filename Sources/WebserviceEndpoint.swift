@@ -10,6 +10,8 @@ type of this data. The path is suffixed by the `queryParameter`
 if given.
 */
 import Foundation
+import Clause
+import Fehlerteufel
 
 protocol WebServiceEndpoint {
 	/// The path to the Endpoint of the WebService
@@ -64,7 +66,7 @@ extension WebServiceEndpoint {
 				: additionalHeaderFields
 		}
 		if let body = body,
-			body.isNotEmpty {
+			!body.isEmpty {
 			guard let contentType = contentType else { fatalError("Body specified but missing contentType for Endpoint \(self)") }
 			result.setValue(contentType, forHTTPHeaderField: "Content-Type")
 			result.httpBody = body
@@ -73,7 +75,7 @@ extension WebServiceEndpoint {
 	}
 }
 
-struct WebServiceEndpointError: LocalizedError {
+struct WebServiceEndpointError: Fehlerteufel.LocalizedError {
 	static var tableName: String { return "WebServiceEndpointErrors" }
 
 	let specifics: ErrorSpecifics
