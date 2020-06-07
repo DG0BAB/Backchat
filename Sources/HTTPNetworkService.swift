@@ -10,7 +10,7 @@ import Clause
 import Fehlerteufel
 import PromiseKit
 
-class HTTPNetworkService: NetworkService {
+open class HTTPNetworkService: NetworkService {
 
 	struct NetworkServiceError: Fehlerteufel.LocalizedError {
 		static var tableName: String { return "NetworkServiceErrors" }
@@ -37,9 +37,9 @@ class HTTPNetworkService: NetworkService {
 	private let xHeaderFields: [String: String]
 	private var currentTask: URLSessionDataTask?
 
-	required init(baseURL: URL,
-				  urlSession: URLSession = .default,
-				  xHeaderFields: [String: String] = [:]) {
+	public required init(baseURL: URL,
+						 urlSession: URLSession = .default,
+						 xHeaderFields: [String: String] = [:]) {
 		self.baseURL = baseURL
 		self.urlSession = urlSession
 		self.xHeaderFields = xHeaderFields
@@ -50,7 +50,7 @@ class HTTPNetworkService: NetworkService {
 		self.init(baseURL: url)
 	}
 
-	func sendRequest(_ request: URLRequest) -> NetworkServiceResponse {
+	public func sendRequest(_ request: URLRequest) -> NetworkServiceResponse {
 		// Cancel any previous task
 		currentTask?.cancel()
 
@@ -113,6 +113,7 @@ class HTTPNetworkService: NetworkService {
 					return
 				}
 				// All is well so fulfill the promise
+				Log.info("Request erfolgreich gesendet und Response verarbeitet.")
 				seal.fulfill((response, data))
 			}
 			// Start the task
@@ -123,7 +124,7 @@ class HTTPNetworkService: NetworkService {
 
 // MARK: - URLSession
 
-private extension URLSession {
+public extension URLSession {
 	static var `default`: URLSession {
 		let configuration = URLSessionConfiguration.default
 		configuration.httpMaximumConnectionsPerHost = 1

@@ -6,10 +6,11 @@ import PromiseKit
 /// A closure that checks if the given `Data` is valid data
 /// in the context of the validator.
 /// Returns `true` if the data is valid otherwise false
-typealias ResponseDataValidator = (Data) -> Bool
+public typealias ResponseDataValidator = (Data) -> Bool
 
 /**
 A `WebserviceAdapter` ties a `WebserviceEndpoint` to a `NetworkService`.
+
 Information from the endpoint can be used to create the request which can then
 be send to the server using the `NetworkService`. The optional `ResponseDataValidator`
 can be used to vaildate the data received from the server.
@@ -19,7 +20,7 @@ works, the description of this protocol is written in subjunctive form.
 
 The default implementation of `data` does, what's written in the summary.
 */
-protocol WebServiceAdapter {
+public protocol WebServiceAdapter {
 
 	/** Sends a request to a server and retrieves the data from the response.
 
@@ -40,7 +41,7 @@ protocol WebServiceAdapter {
 }
 
 
-extension WebServiceAdapter {
+public extension WebServiceAdapter {
 
 	// Request-sending and response-handling - Default Impl
 	var data: Promise<Data> {
@@ -65,10 +66,10 @@ extension WebServiceAdapter {
 Models should conform to this protocol so they can be easily loaded by the
 `WebServiceAdapter/Endpoint/NetworkService` architecture.
 
-i.e. all the Pharmnacy models like `PharmacyDetails`, `CorporateDesign`, etc.
-conform to this protocol so they can be generically handled by the `PharmacyManager`
+Either let your models conform to this protocol if you need handling the response
+and/or the received data in a special way or use the `WebServiceDefaultAdapter`
 */
-protocol WebServiceAdapterProviding {
+public protocol WebServiceAdapterProviding {
 	/// Creates and returns a fully initialized `WebServiceAdapter`
 	///
 	/// - Parameter userInfo: Provides user data that might be needed to create the adapter and
@@ -87,13 +88,13 @@ to the server using the given `NetworkService` when the `data` property is queri
 After the data is received, it's validated using the given, optional `ResponseDataValidator`.
 If validation succeeds or no validator was given, the `data` is given to the inquirer.
 */
-struct WebServiceDefaultAdapter: WebServiceAdapter {
+public struct WebServiceDefaultAdapter: WebServiceAdapter {
 
-	var endpoint: WebServiceEndpoint
-	var networkService: NetworkService
-	var validator: ResponseDataValidator?
+	public var endpoint: WebServiceEndpoint
+	public var networkService: NetworkService
+	public var validator: ResponseDataValidator?
 
-	init(endpoint: WebServiceEndpoint, networkService: NetworkService, validator: ResponseDataValidator? = nil) {
+	public init(endpoint: WebServiceEndpoint, networkService: NetworkService, validator: ResponseDataValidator? = nil) {
 		self.endpoint = endpoint
 		self.networkService = networkService
 		self.validator = validator
@@ -105,7 +106,7 @@ struct WebServiceDefaultAdapter: WebServiceAdapter {
 Your own, specialized `WebServiceAdapter`s, can easily extend this and
 add specific errors.
 */
-struct WebServiceAdapterError: Fehlerteufel.LocalizedError {
+struct WebServiceAdapterError: FTLocalizedError {
 	static var tableName: String { return "WebServiceAdapterErrors" }
 	let specifics: ErrorSpecifics
 	init(_ specifics: ErrorSpecifics) { self.specifics = specifics }

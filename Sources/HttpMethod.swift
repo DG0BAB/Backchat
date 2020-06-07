@@ -1,7 +1,7 @@
 /**
 Available HTTP Methods
 */
-enum HttpMethod {
+public enum HttpMethod {
 	case get
 	case head
 	case post

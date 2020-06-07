@@ -13,7 +13,7 @@ import Foundation
 import Clause
 import Fehlerteufel
 
-protocol WebServiceEndpoint {
+public protocol WebServiceEndpoint {
 	/// The path to the Endpoint of the WebService
 	/// including the leading "/". i.e. "/details"
 	/// __Required.__
@@ -50,7 +50,7 @@ protocol WebServiceEndpoint {
 	var request: URLRequest { get }
 }
 
-extension WebServiceEndpoint {
+public extension WebServiceEndpoint {
 	var contentType: String? { return nil }
 	var body: Data? { return nil }
 	var queryParameter: String? { return nil }
@@ -75,11 +75,11 @@ extension WebServiceEndpoint {
 	}
 }
 
-struct WebServiceEndpointError: Fehlerteufel.LocalizedError {
-	static var tableName: String { return "WebServiceEndpointErrors" }
+public struct WebServiceEndpointError: FTLocalizedError {
+	public static var tableName: String { return "WebServiceEndpointErrors" }
 
-	let specifics: ErrorSpecifics
-	init(_ specifics: ErrorSpecifics) { self.specifics = specifics }
+	public let specifics: ErrorSpecifics
+	public init(_ specifics: ErrorSpecifics) { self.specifics = specifics }
 
 	static func missingContentType(_ code: String = "\(#function)", title: Clause? = nil, recovery: Clause? = nil, failure: FailureText? = nil) -> WebServiceEndpointError {
 		return Error(code, .warning, title: title, recovery: recovery, failure)
