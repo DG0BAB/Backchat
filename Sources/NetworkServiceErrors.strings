@@ -1,25 +1,25 @@
 /* 
   NetworkServiceErrors.strings
-  Apotheken
+  Backchat
 
   Created by Joachim Deelen on 01.04.20.
-  Copyright © 2020 DAN Netzwerk Deutscher Apotheker GmbH. All rights reserved.
+  Copyright © 2020 micabo-software UG. All rights reserved.
 */
 "NetworkServiceError.preparingRequest" = "Request erstellen";
 "NetworkServiceError.preparingRequest.failure.Missing relative path in request" = "Kein relativer Pfad gefunden.";
-"NetworkServiceError.preparingRequest.failure.Couldn't create URL from given \\(url) and base \\(base)." = "URL aus \\(url) relativ zur Basis \\(base) konnte nicht erstellt werden.";
+"NetworkServiceError.preparingRequest.failure.Couldn't create URL from given @(url) and base @(base)." = "URL aus @(url) relativ zur Basis @(base) konnte nicht erstellt werden.";
 
 "NetworkServiceError.sendingRequest" = "Request senden";
-"NetworkServiceError.sendingRequest.failure.Got error \\(error) after sending requst." = "Fehler \\(error) ist aufgetreten.";
+"NetworkServiceError.sendingRequest.failure.Got error @(error) after sending requst." = "Fehler @(error) ist aufgetreten.";
 
 "NetworkServiceError.cancelled" = "Abgebrochen";
-"NetworkServiceError.cancelled.failure.Request \\(request) was cancelled" = "Der Request \\(request) wurde abgebochen.";
+"NetworkServiceError.cancelled.failure.Request @(request) was cancelled" = "Der Request @(request) wurde abgebochen.";
 
 "NetworkServiceError.response" = "Response empfangen";
-"NetworkServiceError.response.failure.Received illegal response \\(response)" = "Illegaler Respnse: \\(response)";
-"NetworkServiceError.response.failure.Received client error with statuc code \\(code)" = "Client status \\(code) wurde empfangen.";
-"NetworkServiceError.response.failure.Received server error with statuc code \\(code)" = "Server status \\(code) wurde empfangen.";
-"NetworkServiceError.response.failure.Received response with status code \\(code)" = "Status \\(code).";
+"NetworkServiceError.response.failure.Received illegal response @(response)" = "Illegaler Respnse: @(response)";
+"NetworkServiceError.response.failure.Received client error with status code @(code)" = "Client status @(code) wurde empfangen.";
+"NetworkServiceError.response.failure.Received server error with status code @(code)" = "Server status @(code) wurde empfangen.";
+"NetworkServiceError.response.failure.Received response with status code @(code)" = "Status @(code).";
 "NetworkServiceError.response.failure.No data received." = "Keine Daten erhalten.";
 
 "NetworkServiceError.cancelled" = "Abgebrochen";

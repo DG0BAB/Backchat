@@ -107,14 +107,13 @@ Your own, specialized `WebServiceAdapter`s, can easily extend this and
 add specific errors.
 */
 struct WebServiceAdapterError: FTLocalizedError {
-	static var tableName: String { return "WebServiceAdapterErrors" }
-	let specifics: ErrorSpecifics
-	init(_ specifics: ErrorSpecifics) { self.specifics = specifics }
+	static var baseStringsFileName: String { return "WebServiceAdapterErrors" }
+	let store: ErrorStoring
 
-	static func sendingRequest(_ code: String = "\(#function)", cause: Error? = nil, title: Clause? = nil, recovery: Clause? = nil, failure: FailureText? = nil) -> WebServiceAdapterError {
-		return Error(code, .error, cause: cause, title: title, recovery: recovery, failure)
+	static func sendingRequest(cause: Error? = nil, failure: FailureText? = nil) -> WebServiceAdapterError {
+		return Error(name: #function, severity: .error, cause: cause, failure: failure)
 	}
-	static func invalidData(_ code: String = "\(#function)", cause: Error? = nil, title: Clause? = nil, recovery: Clause? = nil, failure: FailureText? = nil) -> WebServiceAdapterError {
-		return Error(code, .error, cause: cause, title: title, recovery: recovery, failure)
+	static func invalidData(cause: Error? = nil, failure: FailureText? = nil) -> WebServiceAdapterError {
+		return Error(name: #function, severity: .error, cause: cause, failure: failure)
 	}
 }

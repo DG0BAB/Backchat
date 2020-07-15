@@ -75,13 +75,11 @@ public extension WebServiceEndpoint {
 	}
 }
 
-public struct WebServiceEndpointError: FTLocalizedError {
-	public static var tableName: String { return "WebServiceEndpointErrors" }
+struct WebServiceEndpointError: FTLocalizedError {
+	static var baseStringsFileName: String { return "WebServiceEndpointErrors" }
+	let store: ErrorStoring
 
-	public let specifics: ErrorSpecifics
-	public init(_ specifics: ErrorSpecifics) { self.specifics = specifics }
-
-	static func missingContentType(_ code: String = "\(#function)", title: Clause? = nil, recovery: Clause? = nil, failure: FailureText? = nil) -> WebServiceEndpointError {
-		return Error(code, .warning, title: title, recovery: recovery, failure)
+	static func missingContentType(failure: FailureText? = nil) -> WebServiceEndpointError {
+		return Error(name: #function, severity: .warning, failure: failure)
 	}
 }

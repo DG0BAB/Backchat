@@ -1,9 +1,9 @@
 /* 
   WebServiceAdapterErrors.strings
-  Apotheken
+  Backchat
 
   Created by Joachim Deelen on 01.04.20.
-  Copyright © 2020 DAN Netzwerk Deutscher Apotheker GmbH. All rights reserved.
+  Copyright © 2020 micabo-software UG. All rights reserved.
 */
 
 "WebServiceAdapterError.invalidData" = "Ungültige Daten";

@@ -13,22 +13,21 @@ import PromiseKit
 open class HTTPNetworkService: NetworkService {
 
 	struct NetworkServiceError: Fehlerteufel.LocalizedError {
-		static var tableName: String { return "NetworkServiceErrors" }
+		static var baseStringsFileName: String { return "NetworkServiceErrors" }
 
-		let specifics: ErrorSpecifics
-		init(_ specifics: ErrorSpecifics) { self.specifics = specifics }
+		let store: ErrorStoring
 
-		static func preparingRequest(_ code: String = "\(#function)", title: Clause? = nil, recovery: Clause? = nil, failure: FailureText? = nil) -> NetworkServiceError {
-			return Error(code, .error, title: title, recovery: recovery, failure)
+		static func preparingRequest(failure: FailureText? = nil) -> NetworkServiceError {
+			return Error(name: #function, severity: .error, failure: failure)
 		}
-		static func sendingRequest(_ code: String = "\(#function)", title: Clause? = nil, recovery: Clause? = nil, failure: FailureText? = nil) -> NetworkServiceError {
-			return Error(code, .error, title: title, recovery: recovery, failure)
+		static func sendingRequest(failure: FailureText? = nil) -> NetworkServiceError {
+			return Error(name: #function, severity: .error, failure: failure)
 		}
-		static func response(_ code: String = "\(#function)", title: Clause? = nil, recovery: Clause? = nil, failure: FailureText? = nil) -> NetworkServiceError {
-			return Error(code, .error, title: title, recovery: recovery, failure)
+		static func response(failure: FailureText? = nil) -> NetworkServiceError {
+			return Error(name: #function, severity: .error, failure: failure)
 		}
-		static func cancelled(_ code: String = "\(#function)", title: Clause? = nil, recovery: Clause? = nil, failure: FailureText? = nil) -> NetworkServiceError {
-			return Error(code, .info, title: title, recovery: recovery, failure)
+		static func cancelled(failure: FailureText? = nil) -> NetworkServiceError {
+			return Error(name: #function, severity: .info, failure: failure)
 		}
 	}
 
@@ -98,9 +97,9 @@ open class HTTPNetworkService: NetworkService {
 				// Reject, if status code is not OK
 				guard HTTPStatusCode.isSuccess(response.statusCode) else {
 					if HTTPStatusCode.isClientError(response.statusCode) {
-						seal.reject(NetworkServiceError.response { "Received client error with statuc code \("code:", response.statusCode)" })
+						seal.reject(NetworkServiceError.response { "Received client error with status code \("code:", response.statusCode)" })
 					} else if HTTPStatusCode.isServerError(response.statusCode) {
-						seal.reject(NetworkServiceError.response { "Received server error with statuc code \("code:", response.statusCode)" })
+						seal.reject(NetworkServiceError.response { "Received server error with status code \("code:", response.statusCode)" })
 					} else {
 						seal.reject(NetworkServiceError.response { "Received response with status code \("code:", response.statusCode)" })
 					}
