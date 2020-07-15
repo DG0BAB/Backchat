@@ -26,7 +26,7 @@ package.dependencies = [
 //	.package(url: "git@github.com:DG0BAB/Fehlerteufel.git", .branch("develop")),
 	.package(name: "Fehlerteufel", path: "../../Fehlerteufel/FTPackage"),
 ]
-
+ 
 let targetDependencies: [Target.Dependency] = [
 	"PetiteLogger",
 	"Clause",
