@@ -15,7 +15,7 @@ public typealias NetworkServiceResponse = Promise<(response: HTTPURLResponse, da
 */
 public protocol NetworkService {
 
-	typealias TokenHook = () -> Promise<String>
+	typealias TokenHook = () -> Promise<String?>
 
 	/** Initialize a network Session with the given base `URL` and `URLSession`
 	*/
