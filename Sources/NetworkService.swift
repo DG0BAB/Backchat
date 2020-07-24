@@ -15,9 +15,11 @@ public typealias NetworkServiceResponse = Promise<(response: HTTPURLResponse, da
 */
 public protocol NetworkService {
 
+	typealias TokenHook = () -> Promise<String>
+
 	/** Initialize a network Session with the given base `URL` and `URLSession`
 	*/
-	init(baseURL: URL, urlSession: URLSession, xHeaderFields: [String: String])
+	init(baseURL: URL, urlSession: URLSession, xHeaderFields: [String: String], tokenHook: TokenHook?)
 
 	/** Sends the given `URLRequest` to a server. Using the servers base URL
 	and `URLSession` this `NetworkService` was initilazied with.
