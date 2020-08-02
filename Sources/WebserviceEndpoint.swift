@@ -10,8 +10,7 @@ type of this data. The path is suffixed by the `queryParameter`
 if given.
 */
 import Foundation
-import Clause
-import Fehlerteufel
+@_exported import Fehlerteufel
 
 public protocol WebServiceEndpoint {
 	/// The path to the Endpoint of the WebService

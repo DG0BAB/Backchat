@@ -6,8 +6,7 @@
 //
 
 import Foundation
-import Clause
-import Fehlerteufel
+@_exported import Fehlerteufel
 import PromiseKit
 
 open class HTTPNetworkService: NetworkService {
@@ -131,7 +130,7 @@ open class HTTPNetworkService: NetworkService {
 									return
 							}
 							// All is well so fulfill the promise
-							Log.info("Request erfolgreich gesendet und Response verarbeitet.")
+							Log.info("Request an \(request.url!) erfolgreich gesendet und Response verarbeitet.")
 							seal.fulfill((response, data))
 						}
 						// Start the task

@@ -1,6 +1,5 @@
 import Foundation
-import Clause
-import Fehlerteufel
+@_exported import Fehlerteufel
 import PromiseKit
 
 /// A closure that checks if the given `Data` is valid data
