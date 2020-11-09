@@ -1,4 +1,4 @@
-// swift-tools-version:5.2
+// swift-tools-version:5.3
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -17,6 +17,8 @@ package.platforms = [
 	.iOS(.v13),
 	.macOS(.v10_15)
 ]
+
+package.defaultLocalization = "de"
 
 package.dependencies = [
 	.package(url: "https://github.com/mxcl/PromiseKit", from: "6.10.0"),
@@ -37,7 +39,8 @@ let targetDependencies: [Target.Dependency] = [
 package.targets = [
 	.target(name: packageName,
 			dependencies: targetDependencies,
-			path: "Sources"),
+			path: "Sources",
+			resources: [Resource.process("Resources")]),
 
 	.testTarget(name: "\(packageName)Tests",
 		dependencies: [Target.Dependency(stringLiteral: packageName)])
