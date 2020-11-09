@@ -10,7 +10,7 @@
 "NetworkServiceError.preparingRequest.failure.Couldn't create URL from given @(url) and base @(base)." = "URL aus @(url) relativ zur Basis @(base) konnte nicht erstellt werden.";
 
 "NetworkServiceError.sendingRequest" = "Request senden";
-"NetworkServiceError.sendingRequest.failure.Got error @(error) after sending requst." = "Fehler @(error) ist aufgetreten.";
+"NetworkServiceError.sendingRequest.failure.Got error @(error) after sending request." = "Fehler @(error) ist aufgetreten.";
 
 "NetworkServiceError.cancelled" = "Abgebrochen";
 "NetworkServiceError.cancelled.failure.Request @(request) was cancelled" = "Der Request @(request) wurde abgebochen.";
