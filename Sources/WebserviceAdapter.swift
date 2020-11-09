@@ -54,7 +54,7 @@ public extension WebServiceAdapter {
 					seal.fulfill(responseData.data)
 				}
 				.catch { error in
-					seal.reject(WebServiceAdapterError.sendingRequest(cause: error))
+					seal.reject(WebServiceAdapterError.invokingEndpoint(cause: error) { "Invoking \("endpoint:", endpoint.path)"})
 				}
 		}
 	}
@@ -106,10 +106,12 @@ Your own, specialized `WebServiceAdapter`s, can easily extend this and
 add specific errors.
 */
 struct WebServiceAdapterError: FTLocalizedError {
-	static var baseStringsFileName: String { return "WebServiceAdapterErrors" }
+	static var stringsFileName: String { return "WebServiceAdapterErrors" }
+	static var bundle: Bundle { Bundle.module }
+
 	let store: ErrorStoring
 
-	static func sendingRequest(cause: Error? = nil, failure: FailureText? = nil) -> WebServiceAdapterError {
+	static func invokingEndpoint(cause: Error? = nil, failure: FailureText? = nil) -> WebServiceAdapterError {
 		return Error(name: #function, severity: .error, cause: cause, failure: failure)
 	}
 	static func invalidData(cause: Error? = nil, failure: FailureText? = nil) -> WebServiceAdapterError {

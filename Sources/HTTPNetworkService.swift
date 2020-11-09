@@ -12,7 +12,8 @@ import PromiseKit
 open class HTTPNetworkService: NetworkService {
 
 	struct NetworkServiceError: Fehlerteufel.LocalizedError {
-		static var baseStringsFileName: String { return "NetworkServiceErrors" }
+		static var stringsFileName: String { "NetworkServiceErrors" }
+		static var bundle: Bundle { Bundle.module }
 
 		let store: ErrorStoring
 
@@ -101,7 +102,7 @@ open class HTTPNetworkService: NetworkService {
 								if error.isCancelled {
 									seal.reject(NetworkServiceError.cancelled { "Request \("request:", request) was cancelled" })
 								} else {
-									seal.reject(NetworkServiceError.sendingRequest { "Got error \("error:", error.localizedDescription) after sending requst." })
+									seal.reject(NetworkServiceError.sendingRequest { "Got error \("error:", error.localizedDescription) after sending request." })
 								}
 								return
 							}
