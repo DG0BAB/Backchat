@@ -9,4 +9,5 @@
 "WebServiceAdapterError.invalidData" = "Ungültige Daten";
 "WebServiceAdapterError.invalidData.failure.Data received but validator refused to validate it!" = "Daten wurden empfangen konnten aber nicht validiert werden.";
 
-"WebServiceAdapterError.sendingRequest" = "Request gesendet";
+"WebServiceAdapterError.invokingEndpoint" = "Aufruf Endpoint";
+"WebServiceAdapterError.invokingEndpoint.failure.Invoking @(endpoint)" = "@(endpoint)";
