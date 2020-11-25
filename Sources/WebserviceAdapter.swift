@@ -29,7 +29,7 @@ public protocol WebServiceAdapter {
 	succeeds or no validator was given, it fulfills the promise with the
 	received data. In case of error the promise is rejected.
 	*/
-	var data: Promise<Data> { get }
+	var invoke: Promise<Data> { get }
 
 	var endpoint: WebServiceEndpoint { get }
 	var networkService: NetworkService { get }
@@ -43,7 +43,7 @@ public protocol WebServiceAdapter {
 public extension WebServiceAdapter {
 
 	// Request-sending and response-handling - Default Impl
-	var data: Promise<Data> {
+	var invoke: Promise<Data> {
 		return Promise { seal in
 			networkService.sendRequest(endpoint.request)
 				.done { responseData in
