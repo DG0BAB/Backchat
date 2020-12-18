@@ -2,6 +2,33 @@
   "object": {
     "pins": [
       {
+        "package": "Clause",
+        "repositoryURL": "git@github.com:DG0BAB/Clause.git",
+        "state": {
+          "branch": "develop",
+          "revision": "a66533423f39a4867cc263a5f64d85e6a1174080",
+          "version": null
+        }
+      },
+      {
+        "package": "Fehlerteufel",
+        "repositoryURL": "git@github.com:DG0BAB/Fehlerteufel.git",
+        "state": {
+          "branch": "develop",
+          "revision": "62d92e7ad1efd1e08afac05d0121544367f8ff44",
+          "version": null
+        }
+      },
+      {
+        "package": "PetiteLogger",
+        "repositoryURL": "git@github.com:DG0BAB/PetiteLogger.git",
+        "state": {
+          "branch": "master",
+          "revision": "797d97fe8dc8876e4da393bd51ff16a0e0b44f29",
+          "version": null
+        }
+      },
+      {
         "package": "PromiseKit",
         "repositoryURL": "https://github.com/mxcl/PromiseKit",
         "state": {
