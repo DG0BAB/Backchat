@@ -21,7 +21,7 @@ package.platforms = [
 package.defaultLocalization = "de"
 
 package.dependencies = [
-	.package(url: "https://github.com/mxcl/PromiseKit", from: "6.10.0"),
+//	.package(name:"PromiseKit", url: "https://github.com/mxcl/PromiseKit", from: "6.10.0"),
 	.package(url: "git@github.com:DG0BAB/Clause.git", .branch("develop")),
 	.package(url: "git@github.com:DG0BAB/PetiteLogger.git", .branch("master")),
 	.package(url: "git@github.com:DG0BAB/Fehlerteufel.git", .branch("develop")),
@@ -33,8 +33,8 @@ package.dependencies = [
 let targetDependencies: [Target.Dependency] = [
 	"PetiteLogger",
 	"Clause",
-	"Fehlerteufel",
-	"PromiseKit"
+	"Fehlerteufel"
+//	"Promise"
 ]
 
 package.targets = [
