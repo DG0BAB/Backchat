@@ -4,7 +4,7 @@
 import PackageDescription
 
 // Name of this Package
-let packageName = "backchat"
+let packageName = "Backchat"
 
 let package = Package(name: packageName)
 

@@ -1,7 +1,7 @@
 import XCTest
 
-import backchatTests
+import BackchatTests
 
 var tests = [XCTestCaseEntry]()
-tests += backchatTests.allTests()
+tests += BackchatTests.allTests()
 XCTMain(tests)
