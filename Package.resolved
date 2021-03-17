@@ -30,11 +30,11 @@
       },
       {
         "package": "PromiseKit",
-        "repositoryURL": "https://github.com/mxcl/PromiseKit",
+        "repositoryURL": "https://github.com/DG0BAB/PromiseKit",
         "state": {
-          "branch": null,
-          "revision": "aea48ea1855f5d82e2dffa6027afce3aab8f3dd7",
-          "version": "6.13.3"
+          "branch": "master",
+          "revision": "25adc9994b28bccfc5946de9ae9dde86567029de",
+          "version": null
         }
       }
     ]
