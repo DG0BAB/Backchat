@@ -15,9 +15,16 @@ public typealias NetworkServiceResponse = Promise<(response: HTTPURLResponse, da
 */
 public protocol NetworkService {
 
+	/// A closure returning a Promise that gets fulfilled with a token
 	typealias TokenHook = () -> Promise<String?>
 
-	/** Initialize a network Session with the given base `URL` and `URLSession`
+	/**
+	Initialize a network Session with the parameters
+	- Parameters:
+	- baseURL: The base URL of the server
+	- urlSession: The URLSession to use
+	- xHeaderFields: Additional header fields used for every request send by this service
+	- tokenHook: Optional `TokenHook` that returns a Promise which gets fulfilled with a token
 	*/
 	init(baseURL: URL, urlSession: URLSession, xHeaderFields: [String: String], tokenHook: TokenHook?)
 

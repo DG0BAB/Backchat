@@ -9,9 +9,10 @@ import Foundation
 @_exported import Fehlerteufel
 import PromiseKit
 
+/// HTTP implementation of a `NetworkService`
 open class HTTPNetworkService: NetworkService {
 
-	struct NetworkServiceError: Fehlerteufel.LocalizedError {
+	struct NetworkServiceError: FTLocalizedError {
 		static var stringsFileName: String { "NetworkServiceErrors" }
 		static var bundle: Bundle { Bundle.module }
 
@@ -37,6 +38,12 @@ open class HTTPNetworkService: NetworkService {
 	private let tokenHook: TokenHook?
 	private var currentTask: URLSessionDataTask?
 
+	/// Initialise a `HTTPNetworkService`
+	/// - Parameters:
+	///   - baseURL: The base `URL` of the server to talk to
+	///   - urlSession: The `URLSession` to use. Defaults to a simple session with a default confguration
+	///   - xHeaderFields: Additional header fields. Defaults to an empty array
+	///   - tokenHook: Optional `TokenHook`. Defaults to nil
 	public required init(baseURL: URL,
 						 urlSession: URLSession = .default,
 						 xHeaderFields: [String : String] = [:],
@@ -47,11 +54,16 @@ open class HTTPNetworkService: NetworkService {
 		self.tokenHook = tokenHook
 	}
 
+	/// Initialise a `HTTPNetworkService` with just a base `URL` and default values otherwise
 	convenience init?(baseURL: String) {
 		guard let url = URL(string: baseURL) else { return nil}
 		self.init(baseURL: url)
 	}
 
+	/// Sends the given `URLRequest` to the URL this `NetworkService` was initialised with.
+	/// The `URLSession`, HeaderFields and `TokenHook` of this `NetworkService` are also taken into account
+	/// - Parameter request: The `URLRequest` to send
+	/// - Returns: A `NetworkServiceResponse` which basically is a Promise 
 	public func sendRequest(_ request: URLRequest) -> NetworkServiceResponse {
 		// Cancel any previous task
 		currentTask?.cancel()
