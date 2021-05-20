@@ -21,9 +21,9 @@ package.defaultLocalization = "de"
 
 package.dependencies = [
 	.package(url: "https://github.com/DG0BAB/PromiseKit", .branch("master")),
-	.package(url: "git@github.com:DG0BAB/Clause.git", .branch("develop")),
+	.package(url: "git@github.com:DG0BAB/Clause.git", .branch("master")),
 	.package(url: "git@github.com:DG0BAB/PetiteLogger.git", .branch("master")),
-	.package(url: "git@github.com:DG0BAB/Fehlerteufel.git", .branch("develop")),
+	.package(url: "git@github.com:DG0BAB/Fehlerteufel.git", .branch("master")),
 ]
  
 let targetDependencies: [Target.Dependency] = [
