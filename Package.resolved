@@ -5,8 +5,8 @@
         "package": "Clause",
         "repositoryURL": "git@github.com:DG0BAB/Clause.git",
         "state": {
-          "branch": "develop",
-          "revision": "a66533423f39a4867cc263a5f64d85e6a1174080",
+          "branch": "master",
+          "revision": "b30c67c5a0e3e9381cade01969bcbd9b26291e33",
           "version": null
         }
       },
@@ -14,8 +14,8 @@
         "package": "Fehlerteufel",
         "repositoryURL": "git@github.com:DG0BAB/Fehlerteufel.git",
         "state": {
-          "branch": "develop",
-          "revision": "62d92e7ad1efd1e08afac05d0121544367f8ff44",
+          "branch": "master",
+          "revision": "455e011e4b6667ef0ee8ac431833c823bdecdab2",
           "version": null
         }
       },
