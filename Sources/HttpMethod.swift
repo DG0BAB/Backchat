@@ -6,6 +6,8 @@ public enum HttpMethod {
 	case head
 	case post
 	case put
+	case patch
+	case delete
 
 	/// Returns the name of the method to be used for the request
 	var method: String {
@@ -18,6 +20,10 @@ public enum HttpMethod {
 			return "POST"
 		case .put:
 			return "PUT"
+		case .patch:
+			return "PATCH"
+		case .delete:
+			return "DELETE"
 		}
 	}
 }
