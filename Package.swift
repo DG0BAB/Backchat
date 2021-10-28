@@ -20,7 +20,7 @@ package.platforms = [
 package.defaultLocalization = "de"
 
 package.dependencies = [
-	.package(url: "https://github.com/DG0BAB/PromiseKit", .branch("master")),
+	.package(url: "git@github.com:mxcl/PromiseKit", .upToNextMajor(from: Version(6, 1, 0))),
 	.package(url: "git@github.com:DG0BAB/Clause.git", .branch("master")),
 	.package(url: "git@github.com:DG0BAB/PetiteLogger.git", .branch("master")),
 	.package(url: "git@github.com:DG0BAB/Fehlerteufel.git", .branch("master")),
