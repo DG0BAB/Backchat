@@ -14,8 +14,8 @@
         "package": "Fehlerteufel",
         "repositoryURL": "git@github.com:DG0BAB/Fehlerteufel.git",
         "state": {
-          "branch": "master",
-          "revision": "455e011e4b6667ef0ee8ac431833c823bdecdab2",
+          "branch": "develop",
+          "revision": "85c7a646010798dc91c144fc4f6e21180b970cdd",
           "version": null
         }
       },
