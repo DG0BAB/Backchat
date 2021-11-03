@@ -9,6 +9,11 @@ import Foundation
 @_exported import Fehlerteufel
 import PromiseKit
 
+
+extension LocalizedErrorUserInfoKey {
+	public static let responseKey: LocalizedErrorUserInfoKey = "responseUserInfoKey"
+}
+
 /// HTTP implementation of a `NetworkService`
 open class HTTPNetworkService: NetworkService {
 
@@ -24,8 +29,8 @@ open class HTTPNetworkService: NetworkService {
 		static func sendingRequest(failure: FailureText? = nil) -> NetworkServiceError {
 			return Error(name: #function, severity: .error, failure: failure)
 		}
-		static func response(failure: FailureText? = nil) -> NetworkServiceError {
-			return Error(name: #function, severity: .error, failure: failure)
+		static func response(userInfo: [LocalizedErrorUserInfoKey : Any]? = nil, failure: FailureText? = nil) -> NetworkServiceError {
+			return Error(name: #function, severity: .error, userInfo: userInfo, failure: failure)
 		}
 		static func cancelled(failure: FailureText? = nil) -> NetworkServiceError {
 			return Error(name: #function, severity: .info, failure: failure)
@@ -127,12 +132,13 @@ open class HTTPNetworkService: NetworkService {
 							
 							// Reject, if status code is not OK
 							guard HTTPStatusCode.isSuccess(response.statusCode) else {
+								let userInfo: [LocalizedErrorUserInfoKey : Any] = [.responseKey : response]
 								if HTTPStatusCode.isClientError(response.statusCode) {
-									seal.reject(NetworkServiceError.response { "Received client error with status code \("code:", response.statusCode)" })
+									seal.reject(NetworkServiceError.response(userInfo: userInfo) { "Received client error with status code \("code:", response.statusCode)" })
 								} else if HTTPStatusCode.isServerError(response.statusCode) {
-									seal.reject(NetworkServiceError.response { "Received server error with status code \("code:", response.statusCode)" })
+									seal.reject(NetworkServiceError.response(userInfo: userInfo) { "Received server error with status code \("code:", response.statusCode)" })
 								} else {
-									seal.reject(NetworkServiceError.response { "Received response with status code \("code:", response.statusCode)" })
+									seal.reject(NetworkServiceError.response(userInfo: userInfo) { "Received response with status code \("code:", response.statusCode)" })
 								}
 								return
 							}
