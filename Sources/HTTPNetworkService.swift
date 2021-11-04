@@ -94,10 +94,10 @@ open class HTTPNetworkService: NetworkService {
 						}
 						
 						baseURLComponents.path = baseURLComponents.path + relativeComponents.path
-						if baseURLComponents.queryItems != nil {
-							baseURLComponents.queryItems?.append(contentsOf: relativeComponents.percentEncodedQueryItems ?? [])
+						if baseURLComponents.percentEncodedQueryItems != nil {
+							baseURLComponents.percentEncodedQueryItems?.append(contentsOf: relativeComponents.percentEncodedQueryItems ?? [])
 						} else {
-							baseURLComponents.queryItems = relativeComponents.percentEncodedQueryItems
+							baseURLComponents.percentEncodedQueryItems = relativeComponents.percentEncodedQueryItems
 						}
 						// Create and Check absolute URL
 						guard let url = baseURLComponents.url(relativeTo: baseURLComponents.url) else {
