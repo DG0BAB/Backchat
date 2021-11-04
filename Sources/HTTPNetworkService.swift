@@ -142,10 +142,11 @@ open class HTTPNetworkService: NetworkService {
 								}
 								return
 							}
-							// Reject if no data was received
-							guard let data = data,
-								!data.isEmpty else {
-									seal.reject(NetworkServiceError.response { "No data received." })
+							// Reject if insufficient data was received
+							guard let contentLength = response.allHeaderFields["Content-Length"] as? Int,
+								  let data = data,
+								  data.count == contentLength else {
+									seal.reject(NetworkServiceError.response { "Insufficient data" })
 									return
 							}
 							// All is well so fulfill the promise

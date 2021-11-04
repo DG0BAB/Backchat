@@ -20,7 +20,7 @@
 "NetworkServiceError.response.failure.Received client error with status code @(code)" = "Client status @(code) wurde empfangen.";
 "NetworkServiceError.response.failure.Received server error with status code @(code)" = "Server status @(code) wurde empfangen.";
 "NetworkServiceError.response.failure.Received response with status code @(code)" = "Status @(code).";
-"NetworkServiceError.response.failure.No data received." = "Keine Daten erhalten.";
+"NetworkServiceError.response.failure.Insufficient data" = "Nicht genügend Daten empfangen.";
 
 "NetworkServiceError.cancelled" = "Abgebrochen";
 "NetworkServiceError.cancelled.failure.Request was cancelled" = "Der Request wurde abgebrochen";
