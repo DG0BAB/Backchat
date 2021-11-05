@@ -142,16 +142,9 @@ open class HTTPNetworkService: NetworkService {
 								}
 								return
 							}
-							// Reject if insufficient data was received
-							guard let contentLength = Int((response.allHeaderFields["Content-Length"] as? String) ?? ""),
-								  let data = data,
-								  data.count == contentLength else {
-									seal.reject(NetworkServiceError.response { "Insufficient data" })
-									return
-							}
 							// All is well so fulfill the promise
 							Log.info("Request an \(request.url!) erfolgreich gesendet und Response verarbeitet.")
-							seal.fulfill((response, data))
+							seal.fulfill((response, data ?? Data()))
 						}
 						// Start the task
 						self.currentTask?.resume()
