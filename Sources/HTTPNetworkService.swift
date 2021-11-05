@@ -143,7 +143,7 @@ open class HTTPNetworkService: NetworkService {
 								return
 							}
 							// Reject if insufficient data was received
-							guard let contentLength = response.allHeaderFields["Content-Length"] as? Int,
+							guard let contentLength = Int((response.allHeaderFields["Content-Length"] as? String) ?? ""),
 								  let data = data,
 								  data.count == contentLength else {
 									seal.reject(NetworkServiceError.response { "Insufficient data" })
