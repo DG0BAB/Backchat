@@ -21,12 +21,13 @@ public protocol NetworkService {
 	/**
 	Initialize a network Session with the parameters
 	- Parameters:
-	- baseURL: The base URL of the server
-	- urlSession: The URLSession to use
-	- xHeaderFields: Additional header fields used for every request send by this service
-	- tokenHook: Optional `TokenHook` that returns a Promise which gets fulfilled with a token
+		- baseURL: The base URL of the server
+		- urlSession: The URLSession to use
+		- xHeaderFields: Additional header fields used for every request send by this service
+		- specialHTTPStatusCode: The concrete implementation can do something special on reception of this code.
+		- tokenHook: Optional `TokenHook` that returns a Promise which gets fulfilled with a token
 	*/
-	init(baseURL: URL, urlSession: URLSession, xHeaderFields: [String: String], tokenHook: TokenHook?)
+	init(baseURL: URL, urlSession: URLSession, xHeaderFields: [String: String], specialHTTPStatusCode: HTTPStatusCode?, tokenHook: TokenHook?)
 
 	/** Sends the given `URLRequest` to a server. Using the servers base URL
 	and `URLSession` this `NetworkService` was initilazied with.
