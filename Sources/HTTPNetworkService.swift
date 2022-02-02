@@ -14,8 +14,8 @@ extension LocalizedErrorUserInfoKey {
 	public static let responseKey: LocalizedErrorUserInfoKey = "responseUserInfoKey"
 }
 
-extension Notification.Name {
-	static let BackchatSpecialHTTPStatusCodeReceivedNotification = Notification.Name("BackchatSpecialHTTPStatusCodeReceivedNotification")
+public extension Notification.Name {
+	static let SpecialHTTPStatusCodeReceivedNotification = Notification.Name("SpecialHTTPStatusCodeReceivedNotification")
 }
 
 /// HTTP implementation of a `NetworkService`
@@ -146,7 +146,7 @@ open class HTTPNetworkService: NetworkService {
 									if let specialStatusCode = self.specialStatusCode?.rawValue,
 									   response.statusCode == specialStatusCode  {
 										DispatchQueue.main.sync {
-											NotificationCenter.default.post(name: .BackchatSpecialHTTPStatusCodeReceivedNotification, object: self, userInfo: userInfo)
+											NotificationCenter.default.post(name: .SpecialHTTPStatusCodeReceivedNotification, object: self, userInfo: userInfo)
 										}
 									}
 									seal.reject(NetworkServiceError.response(userInfo: userInfo) { "Received client error with status code \("code:", response.statusCode)" })
