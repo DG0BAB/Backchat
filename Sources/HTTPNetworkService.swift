@@ -148,6 +148,7 @@ open class HTTPNetworkService: NetworkService {
 										DispatchQueue.main.sync {
 											NotificationCenter.default.post(name: .SpecialHTTPStatusCodeReceivedNotification, object: self, userInfo: userInfo)
 										}
+										return
 									}
 									seal.reject(NetworkServiceError.response(userInfo: userInfo) { "Received client error with status code \("code:", response.statusCode)" })
 								} else if HTTPStatusCode.isServerError(response.statusCode) {
