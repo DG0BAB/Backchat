@@ -14,6 +14,10 @@ extension LocalizedErrorUserInfoKey {
 	public static let responseKey: LocalizedErrorUserInfoKey = "responseUserInfoKey"
 }
 
+extension Notification.Name {
+	static let BackchatSpecialHTTPStatusCodeReceivedNotification = Notification.Name("BackchatSpecialHTTPStatusCodeReceivedNotification")
+}
+
 /// HTTP implementation of a `NetworkService`
 open class HTTPNetworkService: NetworkService {
 
@@ -40,6 +44,7 @@ open class HTTPNetworkService: NetworkService {
 	private let baseURL: URL
 	private let urlSession: URLSession
 	private let xHeaderFields: [String: String]
+	private let specialStatusCode: HTTPStatusCode?
 	private let tokenHook: TokenHook?
 	private var currentTask: URLSessionDataTask?
 
@@ -48,14 +53,18 @@ open class HTTPNetworkService: NetworkService {
 	///   - baseURL: The base `URL` of the server to talk to
 	///   - urlSession: The `URLSession` to use. Defaults to a simple session with a default confguration
 	///   - xHeaderFields: Additional header fields. Defaults to an empty array
+	///   - specialHTTPStatusCode: A HTTP status code that, when received,
+	/// 	leads to the sending of the `BackchatSpecialHTTPStatusCodeReceivedNotification`
 	///   - tokenHook: Optional `TokenHook`. Defaults to nil
 	public required init(baseURL: URL,
 						 urlSession: URLSession = .default,
 						 xHeaderFields: [String : String] = [:],
+						 specialHTTPStatusCode: HTTPStatusCode? = nil,
 						 tokenHook: TokenHook? = nil) {
 		self.baseURL = baseURL
 		self.urlSession = urlSession
 		self.xHeaderFields = xHeaderFields
+		self.specialStatusCode = specialHTTPStatusCode
 		self.tokenHook = tokenHook
 	}
 
@@ -68,7 +77,7 @@ open class HTTPNetworkService: NetworkService {
 	/// Sends the given `URLRequest` to the URL this `NetworkService` was initialised with.
 	/// The `URLSession`, HeaderFields and `TokenHook` of this `NetworkService` are also taken into account
 	/// - Parameter request: The `URLRequest` to send
-	/// - Returns: A `NetworkServiceResponse` which basically is a Promise 
+	/// - Returns: A `NetworkServiceResponse` which basically is a Promise
 	public func sendRequest(_ request: URLRequest) -> NetworkServiceResponse {
 		// Cancel any previous task
 		currentTask?.cancel()
@@ -134,6 +143,12 @@ open class HTTPNetworkService: NetworkService {
 							guard HTTPStatusCode.isSuccess(response.statusCode) else {
 								let userInfo: [LocalizedErrorUserInfoKey : Any] = [.responseKey : response]
 								if HTTPStatusCode.isClientError(response.statusCode) {
+									if let specialStatusCode = self.specialStatusCode?.rawValue,
+									   response.statusCode == specialStatusCode  {
+										DispatchQueue.main.sync {
+											NotificationCenter.default.post(name: .BackchatSpecialHTTPStatusCodeReceivedNotification, object: self, userInfo: userInfo)
+										}
+									}
 									seal.reject(NetworkServiceError.response(userInfo: userInfo) { "Received client error with status code \("code:", response.statusCode)" })
 								} else if HTTPStatusCode.isServerError(response.statusCode) {
 									seal.reject(NetworkServiceError.response(userInfo: userInfo) { "Received server error with status code \("code:", response.statusCode)" })
