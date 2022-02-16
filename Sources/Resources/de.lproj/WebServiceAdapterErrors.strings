@@ -6,8 +6,12 @@
   Copyright © 2020 micabo-software UG. All rights reserved.
 */
 
+"WebServiceAdapterError.OK" = "OK";
+"WebServiceAdapterError.Cancel" = "Abbrechen";
+
 "WebServiceAdapterError.invalidData" = "Ungültige Daten";
 "WebServiceAdapterError.invalidData.failure.Data received but validator refused to validate it!" = "Daten wurden empfangen konnten aber nicht validiert werden.";
 
 "WebServiceAdapterError.invokingEndpoint" = "Aufruf Endpoint";
-"WebServiceAdapterError.invokingEndpoint.failure.Invoking @(endpoint)" = "@(endpoint)";
+"WebServiceAdapterError.invokingEndpoint.failure.Invoking @(method) on @(endpoint)" = "@(method) konnte auf Endpunkt @(endpoint) nicht ausgeführt werden.";
+"WebServiceAdapterError.invokingEndpoint.recovery.Check connection" = "Prüfe, ob du mit dem Internet verbunden bist und versuche es erneut.";

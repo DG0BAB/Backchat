@@ -54,7 +54,7 @@ public extension WebServiceAdapter {
 					seal.fulfill(responseData.data)
 				}
 				.catch { error in
-					seal.reject(WebServiceAdapterError.invokingEndpoint(cause: error) { "Invoking \("endpoint:", endpoint.path)"})
+					seal.reject(WebServiceAdapterError.invokingEndpoint(cause: error, recovery: "Check connection") { "Invoking \("method:", endpoint.httpMethod.method) on \("endpoint:", endpoint.path)"})
 				}
 		}
 	}
@@ -111,10 +111,10 @@ struct WebServiceAdapterError: FTLocalizedError {
 
 	let store: ErrorStoring
 
-	static func invokingEndpoint(cause: Error? = nil, failure: FailureText? = nil) -> WebServiceAdapterError {
-		return Error(name: #function, severity: .error, cause: cause, failure: failure)
+	static func invokingEndpoint(cause: Error? = nil, recovery: Clause? = nil, failure: FailureText? = nil) -> WebServiceAdapterError {
+		return Error(name: #function, severity: .error, cause: cause, recovery: recovery, failure: failure)
 	}
-	static func invalidData(cause: Error? = nil, failure: FailureText? = nil) -> WebServiceAdapterError {
-		return Error(name: #function, severity: .error, cause: cause, failure: failure)
+	static func invalidData(cause: Error? = nil, recovery: Clause? = nil, failure: FailureText? = nil) -> WebServiceAdapterError {
+		return Error(name: #function, severity: .error, cause: cause, recovery: recovery, failure: failure)
 	}
 }

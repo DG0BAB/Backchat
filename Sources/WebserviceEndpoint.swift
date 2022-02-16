@@ -73,13 +73,3 @@ public extension WebServiceEndpoint {
 		return result
 	}
 }
-
-struct WebServiceEndpointError: FTLocalizedError {
-	static var stringsFileName: String { return "WebServiceEndpointErrors" }
-	static var bundle: Bundle { Bundle.module }
-	let store: ErrorStoring
-
-	static func missingContentType(failure: FailureText? = nil) -> WebServiceEndpointError {
-		return Error(name: #function, severity: .warning, failure: failure)
-	}
-}
