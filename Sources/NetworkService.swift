@@ -16,7 +16,9 @@ public typealias NetworkServiceResponse = Promise<(response: HTTPURLResponse, da
 public protocol NetworkService {
 
 	/// A closure returning a Promise that gets fulfilled with a token
-	typealias TokenHook = () -> Promise<String?>
+	/// - Parameter requestNew: If true the `TokenHook` should request a new access token
+	/// e.g. by using the refresh token. If false, the current access token should be returned.
+	typealias TokenHook = (Bool) -> Promise<String?>
 
 	/**
 	Initialize a network Session with the parameters
