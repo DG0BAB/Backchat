@@ -84,8 +84,8 @@ open class HTTPNetworkService: NetworkService {
 
 		return Promise { seal in
 
-			let tokenHook = self.tokenHook ?? { return Promise<String?>.value(nil) }
-			tokenHook()
+			let tokenHook = self.tokenHook ?? { _ in return Promise<String?>.value(nil) }
+			tokenHook(false)
 					.done { (token) in
 						// Make request mutatable
 						var request = request
@@ -115,6 +115,9 @@ open class HTTPNetworkService: NetworkService {
 						}
 						request.url = url
 						self.xHeaderFields.forEach { request.setValue($0.value, forHTTPHeaderField: $0.key) }
+
+
+
 						if let token = token {
 							request.setValue(token, forHTTPHeaderField: "Authorization")
 						}
@@ -144,12 +147,15 @@ open class HTTPNetworkService: NetworkService {
 								let userInfo: [LocalizedErrorUserInfoKey : Any] = [.responseKey : response]
 								if HTTPStatusCode.isClientError(response.statusCode) {
 									if let specialStatusCode = self.specialStatusCode?.rawValue,
-									   response.statusCode == specialStatusCode  {
+									   response.statusCode == specialStatusCode  { 
 										DispatchQueue.main.sync {
 											NotificationCenter.default.post(name: .SpecialHTTPStatusCodeReceivedNotification, object: self, userInfo: userInfo)
 										}
 										return
+									} else if response.statusCode == HTTPStatusCode.unauthorized.rawValue {
+
 									}
+
 									seal.reject(NetworkServiceError.response(userInfo: userInfo) { "Received client error with status code \("code:", response.statusCode)" })
 								} else if HTTPStatusCode.isServerError(response.statusCode) {
 									seal.reject(NetworkServiceError.response(userInfo: userInfo) { "Received server error with status code \("code:", response.statusCode)" })
@@ -162,6 +168,8 @@ open class HTTPNetworkService: NetworkService {
 							Log.info("Request an \(request.url!) erfolgreich gesendet und Response verarbeitet.")
 							seal.fulfill((response, data ?? Data()))
 						}
+
+
 						// Start the task
 						self.currentTask?.resume()
 					}
