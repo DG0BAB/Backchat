@@ -56,7 +56,10 @@ public extension WebServiceEndpoint {
 	var additionalHeaderFields: [String : String]? { return nil }
 	
 	var request: URLRequest {
-		guard let url = URL(string: "\(path)\(queryParameter ?? "")") else { fatalError("Couldn't create URL for Endpoint \(self)") }
+		var components = URLComponents()
+		components.path = path
+		components.query = queryParameter
+		guard let url = components.url else { fatalError("Couldn't create URL for Endpoint \(self)") }
 		var result = URLRequest(url: url)
 		result.httpMethod = httpMethod.method
 		if let additionalHeaderFields = additionalHeaderFields {
