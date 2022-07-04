@@ -29,7 +29,8 @@ public protocol WebServiceAdapter {
 	succeeds or no validator was given, it fulfills the promise with the
 	received data. In case of error the promise is rejected.
 	*/
-	var invoke: Promise<Data> { get }
+	var invokeOld: Promise<Data> { get }
+	var invoke: Data { get async throws }
 
 	var endpoint: WebServiceEndpoint { get }
 	var networkService: NetworkService { get }
@@ -43,19 +44,48 @@ public protocol WebServiceAdapter {
 public extension WebServiceAdapter {
 
 	// Request-sending and response-handling - Default Impl
-	var invoke: Promise<Data> {
+	var invokeOld: Promise<Data> {
 		return Promise { seal in
-			networkService.sendRequest(endpoint.request)
-				.done { responseData in
-					guard self.validator?(responseData.data) ?? true else {
+			Task.detached {
+				do {
+					let responseData = try await networkService.sendRequest(endpoint.request)
+					guard self.validator?(responseData.0) ?? true else {
 						seal.reject(WebServiceAdapterError.invalidData { "Data received but validator refused to validate it!" })
 						return
 					}
-					seal.fulfill(responseData.data)
-				}
-				.catch { error in
+					seal.fulfill(responseData.0)
+				} catch {
 					seal.reject(WebServiceAdapterError.invokingEndpoint(cause: error, recovery: "Check connection") { "Invoking \("method:", endpoint.httpMethod.method) on \("endpoint:", endpoint.path)"})
 				}
+
+
+
+				//			networkService.sendRequest(endpoint.request)
+				//				.done { responseData in
+				//					guard self.validator?(responseData.data) ?? true else {
+				//						seal.reject(WebServiceAdapterError.invalidData { "Data received but validator refused to validate it!" })
+				//						return
+				//					}
+				//					seal.fulfill(responseData.data)
+				//				}
+				//				.catch { error in
+				//					seal.reject(WebServiceAdapterError.invokingEndpoint(cause: error, recovery: "Check connection") { "Invoking \("method:", endpoint.httpMethod.method) on \("endpoint:", endpoint.path)"})
+				//				}
+			}
+		}
+	}
+
+	var invoke: Data {
+		get async throws {
+			do {
+				let responseData = try await networkService.sendRequest(endpoint.request)
+				guard self.validator?(responseData.0) ?? true else {
+					throw WebServiceAdapterError.invalidData { "Data received but validator refused to validate it!" }
+				}
+				return responseData.0
+			} catch {
+				throw WebServiceAdapterError.invokingEndpoint(cause: error, recovery: "Check connection") { "Invoking \("method:", endpoint.httpMethod.method) on \("endpoint:", endpoint.path)"}
+			}
 		}
 	}
 }

@@ -7,8 +7,6 @@
 
 import Foundation
 @_exported import Fehlerteufel
-import PromiseKit
-
 
 extension LocalizedErrorUserInfoKey {
 	public static let responseKey: LocalizedErrorUserInfoKey = "responseUserInfoKey"
@@ -30,8 +28,8 @@ open class HTTPNetworkService: NetworkService {
 		static func preparingRequest(failure: FailureText? = nil) -> NetworkServiceError {
 			return Error(name: #function, severity: .error, failure: failure)
 		}
-		static func sendingRequest(failure: FailureText? = nil) -> NetworkServiceError {
-			return Error(name: #function, severity: .error, failure: failure)
+		static func sendingRequest(cause: Error? = nil, failure: FailureText? = nil) -> NetworkServiceError {
+			return Error(name: #function, severity: .error, cause: cause, failure: failure)
 		}
 		static func response(userInfo: [LocalizedErrorUserInfoKey : Any]? = nil, failure: FailureText? = nil) -> NetworkServiceError {
 			return Error(name: #function, severity: .error, userInfo: userInfo, failure: failure)
@@ -74,110 +72,92 @@ open class HTTPNetworkService: NetworkService {
 		self.init(baseURL: url)
 	}
 
-	/// Sends the given `URLRequest` to the URL this `NetworkService` was initialised with.
+	/// Asynchronously sends the given `URLRequest` to the URL this `NetworkService` was initialised with.
 	/// The `URLSession`, HeaderFields and `TokenHook` of this `NetworkService` are also taken into account
 	/// - Parameter request: The `URLRequest` to send
-	/// - Returns: A `NetworkServiceResponse` which basically is a Promise
-	public func sendRequest(_ request: URLRequest) -> NetworkServiceResponse {
-		// Cancel any previous task
-		currentTask?.cancel()
+	/// - Returns: A `NetworkServiceResponse` which is the following tupple (Date, HTTPURLResponse)
+	public func sendRequest(_ request: URLRequest) async throws -> NetworkServiceResponse {
 
-		return Promise { seal in
+		// Make request mutatable
+		var request = request
 
-			let tokenHook = self.tokenHook ?? { _ in return Promise<String?>.value(nil) }
-			tokenHook(false)
-					.done { (token) in
-						// Make request mutatable
-						var request = request
-						
-						guard var baseURLComponents = URLComponents(url: self.baseURL, resolvingAgainstBaseURL: false) else {
-							seal.reject(NetworkServiceError.preparingRequest { "Malformed base URL" })
-							return
-						}
-						
-						// Check if relative URL exist
-						guard let relativeUrl = request.url,
-							let relativeComponents = URLComponents(url: relativeUrl, resolvingAgainstBaseURL: false) else {
-								seal.reject(NetworkServiceError.preparingRequest { "Missing relative path in request" })
-								return
-						}
-						
-						baseURLComponents.path = baseURLComponents.path + relativeComponents.path
-						if baseURLComponents.percentEncodedQueryItems != nil {
-							baseURLComponents.percentEncodedQueryItems?.append(contentsOf: relativeComponents.percentEncodedQueryItems ?? [])
-						} else {
-							baseURLComponents.percentEncodedQueryItems = relativeComponents.percentEncodedQueryItems
-						}
-						// Create and Check absolute URL
-						guard let url = baseURLComponents.url(relativeTo: baseURLComponents.url) else {
-							seal.reject(NetworkServiceError.preparingRequest { "Couldn't create URL from given \("url:", relativeComponents.url) and base \("base:", self.baseURL)." })
-							return
-						}
-						request.url = url
-						self.xHeaderFields.forEach { request.setValue($0.value, forHTTPHeaderField: $0.key) }
-
-
-
-						if let token = token {
-							request.setValue(token, forHTTPHeaderField: "Authorization")
-						}
-						// Create the task
-						self.currentTask = self.urlSession.dataTask(with: request) { (data, responseReceived, error) in
-							defer { self.currentTask = nil }
-							
-							// In case of error reject immediately
-							guard error == nil else {
-								let error = error!
-								if error.isCancelled {
-									seal.reject(NetworkServiceError.cancelled { "Request \("request:", request) was cancelled" })
-								} else {
-									seal.reject(NetworkServiceError.sendingRequest { "Got error \("error:", error.localizedDescription) after sending request." })
-								}
-								return
-							}
-							
-							// Reject if not a HTTPRespone
-							guard let response = responseReceived as? HTTPURLResponse else {
-								seal.reject(NetworkServiceError.response { "Received illegal response \("response:", responseReceived)" })
-								return
-							}
-							
-							// Reject, if status code is not OK
-							guard HTTPStatusCode.isSuccess(response.statusCode) else {
-								let userInfo: [LocalizedErrorUserInfoKey : Any] = [.responseKey : response]
-								if HTTPStatusCode.isClientError(response.statusCode) {
-									if let specialStatusCode = self.specialStatusCode?.rawValue,
-									   response.statusCode == specialStatusCode  { 
-										DispatchQueue.main.sync {
-											NotificationCenter.default.post(name: .SpecialHTTPStatusCodeReceivedNotification, object: self, userInfo: userInfo)
-										}
-										return
-									} else if response.statusCode == HTTPStatusCode.unauthorized.rawValue {
-
-									}
-
-									seal.reject(NetworkServiceError.response(userInfo: userInfo) { "Received client error with status code \("code:", response.statusCode)" })
-								} else if HTTPStatusCode.isServerError(response.statusCode) {
-									seal.reject(NetworkServiceError.response(userInfo: userInfo) { "Received server error with status code \("code:", response.statusCode)" })
-								} else {
-									seal.reject(NetworkServiceError.response(userInfo: userInfo) { "Received response with status code \("code:", response.statusCode)" })
-								}
-								return
-							}
-							// All is well so fulfill the promise
-							Log.info("Request an \(request.url!) erfolgreich gesendet und Response verarbeitet.")
-							seal.fulfill((response, data ?? Data()))
-						}
-
-
-						// Start the task
-						self.currentTask?.resume()
-					}
-					.catch { error in
-						seal.reject(NetworkServiceError.preparingRequest { "TokenHook got no token" })
-						return
-					}
+		guard var baseURLComponents = URLComponents(url: self.baseURL, resolvingAgainstBaseURL: false) else {
+			throw NetworkServiceError.preparingRequest { "Malformed base URL" }
 		}
+
+		// Check if relative URL exist
+		guard let relativeUrl = request.url,
+			  let relativeComponents = URLComponents(url: relativeUrl, resolvingAgainstBaseURL: false) else {
+			throw NetworkServiceError.preparingRequest { "Missing relative path in request" }
+		}
+
+		baseURLComponents.path = baseURLComponents.path + relativeComponents.path
+		if baseURLComponents.percentEncodedQueryItems != nil {
+			baseURLComponents.percentEncodedQueryItems?.append(contentsOf: relativeComponents.percentEncodedQueryItems ?? [])
+		} else {
+			baseURLComponents.percentEncodedQueryItems = relativeComponents.percentEncodedQueryItems
+		}
+		// Create and Check absolute URL
+		guard let url = baseURLComponents.url(relativeTo: baseURLComponents.url) else {
+			throw NetworkServiceError.preparingRequest { "Couldn't create URL from given \("url:", relativeComponents.url) and base \("base:", self.baseURL)." }
+		}
+		request.url = url
+		self.xHeaderFields.forEach { request.setValue($0.value, forHTTPHeaderField: $0.key) }
+
+		let _tokenHook: TokenHook = self.tokenHook ?? { _ in return nil }
+		
+		var tryCount = 0
+		var receivedResponse: NetworkServiceResponse
+
+		repeat {
+			print("This is try: \(tryCount) with \(String(describing: _tokenHook))")
+			if let token = await _tokenHook(tryCount == 1) {
+				print("Got \(tryCount == 0 ? "current token" : "new token")")
+				request.setValue(token, forHTTPHeaderField: "Authorization")
+			} else {
+				print("Got no token for try \(tryCount)")
+				tryCount += 1
+			}
+			do {
+				let (data, response) = try await self.urlSession.data(for: request)
+
+				guard let response = response as? HTTPURLResponse else {
+					throw NetworkServiceError.response { "Received illegal response \("response:", response)" }
+				}
+
+				receivedResponse.0 = data
+				receivedResponse.1 = response
+
+				// Error Handling if status code is not OK (200)
+				guard HTTPStatusCode.isSuccess(response.statusCode) else {
+					let userInfo: [LocalizedErrorUserInfoKey : Any] = [.responseKey : response]
+					if HTTPStatusCode.isClientError(response.statusCode) {
+						if let specialStatusCode = self.specialStatusCode?.rawValue,
+						   response.statusCode == specialStatusCode  {
+							await MainActor.run {
+								NotificationCenter.default.post(name: .SpecialHTTPStatusCodeReceivedNotification, object: self, userInfo: userInfo)
+							}
+						} else if response.statusCode == HTTPStatusCode.unauthorized.rawValue && tryCount == 0 {
+							tryCount += 1
+							print("Unauthorized! Trying to get new token with try count: \(tryCount)")
+							continue
+						}
+						throw NetworkServiceError.response(userInfo: userInfo) { "Received client error with status code \("code:", response.statusCode)" }
+					} else if HTTPStatusCode.isServerError(response.statusCode) {
+						throw NetworkServiceError.response(userInfo: userInfo) { "Received server error with status code \("code:", response.statusCode)" }
+					} else {
+						throw NetworkServiceError.response(userInfo: userInfo) { "Received response with status code \("code:", response.statusCode)" }
+					}
+				}
+				// All is well so fulfill the promise
+				Log.info("Request an \(request.url!) erfolgreich gesendet und Response verarbeitet.")
+				break
+			} catch {
+				throw NetworkServiceError.sendingRequest(cause: error) { "Got error \("error:", error.localizedDescription) after sending request." }
+			}
+
+		} while tryCount < 2
+		return receivedResponse
 	}
 }
 
