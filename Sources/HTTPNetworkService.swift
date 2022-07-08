@@ -110,12 +110,18 @@ open class HTTPNetworkService: NetworkService {
 		var receivedResponse: NetworkServiceResponse
 
 		repeat {
+			#if DEBUG
 			print("This is try: \(tryCount) with \(String(describing: _tokenHook))")
+			#endif
 			if let token = await _tokenHook(tryCount == 1) {
-				print("Got \(tryCount == 0 ? "current token" : "new token")")
+				#if DEBUG
+				print("Got \(tryCount == 0 ? "current token" : "new token") for request: \(request)")
+				#endif
 				request.setValue(token, forHTTPHeaderField: "Authorization")
 			} else {
+				#if DEBUG
 				print("Got no token for try \(tryCount)")
+				#endif
 				tryCount += 1
 			}
 			do {
@@ -139,7 +145,9 @@ open class HTTPNetworkService: NetworkService {
 							}
 						} else if response.statusCode == HTTPStatusCode.unauthorized.rawValue && tryCount == 0 {
 							tryCount += 1
-							print("Unauthorized! Trying to get new token with try count: \(tryCount)")
+							#if DEBUG
+							print("Unauthorized! Trying to get new token with try count: \(tryCount) for request: \(request)")
+							#endif
 							continue
 						}
 						throw NetworkServiceError.response(userInfo: userInfo) { "Received client error with status code \("code:", response.statusCode)" }
