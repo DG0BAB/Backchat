@@ -6,7 +6,7 @@
         "repositoryURL": "https://github.com/DG0BAB/Clause.git",
         "state": {
           "branch": "master",
-          "revision": "b30c67c5a0e3e9381cade01969bcbd9b26291e33",
+          "revision": "383c16cdf42e4d0114cf059fdbb48454e6a061ca",
           "version": null
         }
       },
@@ -15,7 +15,7 @@
         "repositoryURL": "https://github.com/DG0BAB/Fehlerteufel.git",
         "state": {
           "branch": "develop",
-          "revision": "85c7a646010798dc91c144fc4f6e21180b970cdd",
+          "revision": "ed3fbc0d39f92326ef240bb625473eaeec71bad4",
           "version": null
         }
       },
@@ -24,7 +24,7 @@
         "repositoryURL": "https://github.com/DG0BAB/PetiteLogger.git",
         "state": {
           "branch": "master",
-          "revision": "797d97fe8dc8876e4da393bd51ff16a0e0b44f29",
+          "revision": "4c9066ecf6359a588aaa2e63fda1298660568d27",
           "version": null
         }
       }
