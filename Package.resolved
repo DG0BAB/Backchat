@@ -3,7 +3,7 @@
     "pins": [
       {
         "package": "Clause",
-        "repositoryURL": "git@github.com:DG0BAB/Clause.git",
+        "repositoryURL": "https://github.com/DG0BAB/Clause.git",
         "state": {
           "branch": "master",
           "revision": "b30c67c5a0e3e9381cade01969bcbd9b26291e33",
@@ -12,7 +12,7 @@
       },
       {
         "package": "Fehlerteufel",
-        "repositoryURL": "git@github.com:DG0BAB/Fehlerteufel.git",
+        "repositoryURL": "https://github.com/DG0BAB/Fehlerteufel.git",
         "state": {
           "branch": "develop",
           "revision": "85c7a646010798dc91c144fc4f6e21180b970cdd",
@@ -21,20 +21,11 @@
       },
       {
         "package": "PetiteLogger",
-        "repositoryURL": "git@github.com:DG0BAB/PetiteLogger.git",
+        "repositoryURL": "https://github.com/DG0BAB/PetiteLogger.git",
         "state": {
           "branch": "master",
           "revision": "797d97fe8dc8876e4da393bd51ff16a0e0b44f29",
           "version": null
-        }
-      },
-      {
-        "package": "PromiseKit",
-        "repositoryURL": "git@github.com:mxcl/PromiseKit",
-        "state": {
-          "branch": null,
-          "revision": "00afea5360bf1c02ac83209c2c8991f73b5a4e7d",
-          "version": "6.16.1"
         }
       }
     ]

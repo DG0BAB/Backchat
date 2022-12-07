@@ -20,9 +20,9 @@ package.platforms = [
 package.defaultLocalization = "de"
 
 package.dependencies = [
-	.package(url: "git@github.com:DG0BAB/Clause.git", .branch("master")),
-	.package(url: "git@github.com:DG0BAB/PetiteLogger.git", .branch("master")),
-	.package(url: "git@github.com:DG0BAB/Fehlerteufel.git", .branch("develop")),
+	.package(url: "https://github.com/DG0BAB/Clause.git", .branch("master")),
+	.package(url: "https://github.com/DG0BAB/PetiteLogger.git", .branch("master")),
+	.package(url: "https://github.com/DG0BAB/Fehlerteufel.git", .branch("develop")),
 ]
  
 let targetDependencies: [Target.Dependency] = [
